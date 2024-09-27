@@ -25,7 +25,7 @@ public class MatchingServiceImplements implements MatchingService {
                     .filter(mentee -> matches(mentor, mentee))
                     .collect(Collectors.toList());
         }
-        return List.of(); // Return empty list if mentor not found
+        return List.of();
     }
 
     private boolean matches(User mentor, User mentee) {
