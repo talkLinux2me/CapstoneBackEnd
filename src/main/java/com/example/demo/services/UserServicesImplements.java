@@ -1,13 +1,13 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.EditUserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.models.User;
 import com.example.demo.repository.UserRepository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -131,8 +131,113 @@ public class UserServicesImplements implements UserServices {
                 .filter(mentor -> !mentor.getId().equals(menteeId) &&
                         mentor.getAvailability().stream().anyMatch(menteeUser.getAvailability()::contains) &&
                         mentor.getMeetingType().equals(menteeUser.getMeetingType()) &&
-                        !mentor.getCodingLanguages().stream().noneMatch(menteeUser.getCodingLanguages()::contains) &&
+                        !mentor.getCodingLanguage().stream().noneMatch(menteeUser.getCodingLanguage()::contains) &&
                         !mentor.getExpertise().stream().noneMatch(menteeUser.getExpertise()::contains))
                 .collect(Collectors.toList());
+    }
+
+
+
+
+    public List<User> getAllFreeMentors(){
+            List<User> allUsers = userRepository.findAll();
+            List<User> mentors = new ArrayList<>();
+
+            for (User user : allUsers) {
+                if ("mentor".equalsIgnoreCase(user.getRole())) {
+                    mentors.add(user);
+                }
+            }
+
+       return mentors;
+
+    }
+
+    public List<User> getAllFreeMentees(){
+        List<User> allUsers = userRepository.findAll();
+        List<User> mentees = new ArrayList<>();
+
+        for (User user : allUsers) {
+
+         if ("mentee".equalsIgnoreCase(user.getRole())) {
+            mentees.add(user);
+        }
+        }
+        return mentees;
+    }
+
+
+    public Optional <User> editUserProfile(Long userId, EditUserDTO newDetails){
+
+        Optional<User> foundUser = userRepository.findById(userId);
+
+        if(foundUser.isPresent()){
+            foundUser.get().setLocation(newDetails.getLocation());
+            foundUser.get().setInterests(newDetails.getInterests());
+            foundUser.get().setSkills(newDetails.getSkills());
+            foundUser.get().setPersonalStatement(newDetails.getPersonalStatement());
+
+            return Optional.of(userRepository.save(foundUser.get()));
+        }
+
+        return Optional.empty();
+
+    }
+
+
+    public User matchMenteeWithMentor(User mentee, List<User> mentors) {
+        // Create a map to store mentors and their matching scores
+        Map<User, Integer> mentorScores = new HashMap<>();
+
+        // Iterate through mentors and calculate scores
+        for (User mentor : mentors) {
+            int score = calculateMatchScore(mentee, mentor);
+            if (score > 0) {
+                mentorScores.put(mentor, score);
+            }
+        }
+
+        // If no mentors match, return null
+        if (mentorScores.isEmpty()) {
+            return null;
+        }
+
+        // Find the maximum score
+        int maxScore = Collections.max(mentorScores.values());
+
+        // Get all mentors with the maximum score
+        List<User> bestMatches = mentorScores.entrySet().stream()
+                .filter(entry -> entry.getValue() == maxScore)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        // Return a random mentor from the best matches
+        Random random = new Random();
+        return bestMatches.get(random.nextInt(bestMatches.size()));
+    }
+
+    public int calculateMatchScore(User mentee, User mentor) {
+        int score = 0;
+
+        // Check if meeting type matches
+        if (mentor.getMeetingType().equals(mentee.getMeetingType())) {
+            score++;
+        }
+
+        // Check for matching availability
+        List<String> commonAvailability = new ArrayList<>(mentee.getAvailability());
+        commonAvailability.retainAll(mentor.getAvailability());
+        if (!commonAvailability.isEmpty()) {
+            score++;
+        }
+
+        // Check for matching coding languages
+        List<String> commonCodingLanguages = new ArrayList<>(mentee.getCodingLanguage());
+        commonCodingLanguages.retainAll(mentor.getCodingLanguage());
+        if (!commonCodingLanguages.isEmpty()) {
+            score++;
+        }
+
+        return score; // Return the total score
     }
 }

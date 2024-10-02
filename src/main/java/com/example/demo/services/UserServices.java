@@ -3,6 +3,7 @@ package com.example.demo.services;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.dto.EditUserDTO;
 import com.example.demo.models.User;
 
 public interface UserServices {
@@ -25,4 +26,15 @@ public interface UserServices {
     List<User> getAllMentees(Long mentorId);
 
     List<User> getAllMentors(Long menteeId);
+
+
+    List<User> getAllFreeMentors();
+
+    List<User> getAllFreeMentees();
+
+    Optional<User> editUserProfile(Long userId, EditUserDTO newDetails);
+    User matchMenteeWithMentor(User mentee, List<User> mentors);
+
+    int calculateMatchScore(User mentee, User mentor);
+
 }

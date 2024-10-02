@@ -1,5 +1,7 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dto.EditUserDTO;
+import com.example.demo.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import com.example.demo.models.User;
 import com.example.demo.services.UserServices;
 import com.example.demo.services.MatchingService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,11 +31,15 @@ public class UserController {
     @Autowired
     private MatchingService matchingService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User newUser) {
         logger.info("Registering user: {}", newUser.getEmail());
         Optional<User> existingUser = userServices.findByEmail(newUser.getEmail());
 
+        logger.info(String.valueOf(existingUser));
         if (existingUser.isPresent()) {
             logger.warn("Email already in use: {}", newUser.getEmail());
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already in use.");
@@ -49,13 +56,17 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         logger.info("User login attempt: {}", loginRequest.getEmail());
         Optional<User> user = userServices.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
 
         if (user.isPresent()) {
+            HashMap response = new HashMap<>();
+            response.put("token", "granted");
+            response.put("userID", user.get().getId() );
+            response.put("role", user.get().getRole());
             logger.info("User logged in successfully: {}", loginRequest.getEmail());
-            return ResponseEntity.ok().body("granted");
+            return ResponseEntity.ok().body(response);
         } else {
             logger.warn("Login failed for user: {}", loginRequest.getEmail());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email or Password is Incorrect");
@@ -126,5 +137,59 @@ public class UserController {
         return matches.isEmpty()
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of())
                 : (ResponseEntity<List<MatchDTO>>) ResponseEntity.ok();
+    }
+
+
+
+    @GetMapping("/getAllMentors")
+    public  ResponseEntity<?> getAllMentors(){
+        List<User> allMentors = userServices.getAllFreeMentors();
+        return  ResponseEntity.ok().body(allMentors);
+    }
+
+
+    @GetMapping("/getAllMentees")
+    public  ResponseEntity<?> getAllMentees(){
+        List<User> allMentees = userServices.getAllFreeMentees();
+        return  ResponseEntity.ok().body(allMentees);
+    }
+
+
+
+    @PutMapping("/edit/{userID}")
+    public ResponseEntity<?> editUser(@PathVariable Long userID, @RequestBody EditUserDTO newDetails) {
+        Optional<User> foundUser = userServices.editUserProfile(userID, newDetails);
+
+        if (foundUser.isPresent()) {
+            return ResponseEntity.ok().body(foundUser.get());
+        }
+
+        return ResponseEntity.ok().body("OOpsie something happened");
+
+    }
+
+
+
+    @GetMapping("/match/{menteeId}")
+    public ResponseEntity<User> matchMenteeWithMentor(@PathVariable Long menteeId) {
+        // Fetch the mentee based on ID
+       Optional<User> mentee = userRepository.findById(menteeId);
+
+
+        if (!mentee.isPresent()) {
+            return ResponseEntity.notFound().build(); // Return 404 if mentee not found
+        }
+
+        // Fetch all mentors
+        List<User> mentors = userServices.getAllFreeMentors();
+
+        // Get a matched mentor
+        User matchedMentor = userServices.matchMenteeWithMentor(mentee.get(),mentors);
+
+        if (matchedMentor != null) {
+            return ResponseEntity.ok(matchedMentor); // Return matched mentor
+        } else {
+            return ResponseEntity.noContent().build(); // Return 204 if no matches found
+        }
     }
 }

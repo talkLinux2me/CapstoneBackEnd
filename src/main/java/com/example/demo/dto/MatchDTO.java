@@ -12,7 +12,9 @@ public class MatchDTO {
     private String menteeName;
     private List<String> commonAvailability;
     private String meetingType;
-    private List<String> commonCodingLanguages;
+    private List<String> commonCodingLanguage;
     private String interests;
+    private String location;
+    private String certifications;
 }
 

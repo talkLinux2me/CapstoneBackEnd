@@ -29,8 +29,8 @@ public class User {
     @Column(name= "certifications")
     private String certifications;
 
-//    @Column(name = "profile_pic")
-//    private String profilePic;
+    @Column(name = "profile_pic")
+    private String profilePic;
 
 
     @ElementCollection
@@ -38,20 +38,23 @@ public class User {
     private List<String> expertise; // List of areas of expertise
 
     @Column(name = "years_of_experience")
-    private int yearsOfExperience; // Number of years of experience
+    private int yearsOfExperience;
 
     @Column(name = "location")
-    private String location; // Mentor's location
+    private String location;
 
+
+    @Column(name ="role")
+    private String role;
 
     @ElementCollection
-    @Column(name = "coding_languages")
-    private List<String> codingLanguages; // Languages the mentor knows
+    @Column(name = "coding_language")
+    private List<String> codingLanguage; // Languages the mentor knows
 
 
     @ElementCollection
     @Column(name = "availability")
-    private List<String> availability; // e.g., ["Monday", "Wednesday"]
+    private List<String> availability; // part time, full time, on demand
 
 
     @Column(name = "meeting_type")
@@ -66,4 +69,14 @@ public class User {
    @CollectionTable(name = "mentor_ids", joinColumns = @JoinColumn(name = "user_id"))
    @Column(name = "mentor_id")
    private List<Long> mentors;
+
+
+   private String personalStatement;
+
+
+   private List<String> interests;
+
+   private List <String> skills;
+
+
 }

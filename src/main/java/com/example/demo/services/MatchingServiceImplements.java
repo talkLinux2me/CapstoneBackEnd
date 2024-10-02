@@ -32,6 +32,6 @@ public class MatchingServiceImplements implements MatchingService {
         // Match based on availability, meeting type, coding languages, etc.
         return mentor.getAvailability().stream().anyMatch(mentee.getAvailability()::contains) &&
                 mentor.getMeetingType().equals(mentee.getMeetingType()) &&
-                !mentor.getCodingLanguages().stream().noneMatch(mentee.getCodingLanguages()::contains);
+                !mentor.getCodingLanguage().stream().noneMatch(mentee.getCodingLanguage()::contains);
     }
 }
