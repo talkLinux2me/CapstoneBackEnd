@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import com.example.demo.dto.EditUserDTO;
 import com.example.demo.models.User;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface UserServices {
     List<User> getAllUsers();
 

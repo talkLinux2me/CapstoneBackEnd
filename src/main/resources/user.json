@@ -11,7 +11,7 @@
       "codingLanguage": ["Java", "JavaScript"],
       "availability": ["Monday", "Wednesday"],
       "meetingType": "virtual",
-      "mentees": [],
+      "menteeId": [],
       "mentors": []
     },
 
@@ -27,7 +27,7 @@
     "codingLanguage": ["Python"],
     "availability": ["Tuesday", "Thursday"],
     "meetingType": "in-person",
-    "mentees": [],
+    "menteeId": [],
     "mentors": []
   },
   {
@@ -42,7 +42,7 @@
     "codingLanguage": ["Python", "R"],
     "availability": ["Monday", "Friday"],
     "meetingType": "virtual",
-    "mentees": [],
+    "menteeId": [],
     "mentors": []
   },
   {
@@ -57,7 +57,7 @@
     "codingLanguage": [],
     "availability": ["Wednesday", "Saturday"],
     "meetingType": "in-person",
-    "mentees": [],
+    "menteeId": [],
     "mentors": []
   },
   {
@@ -72,7 +72,7 @@
     "codingLanguage": ["Python", "Bash"],
     "availability": ["Tuesday", "Thursday"],
     "meetingType": "virtual",
-    "mentees": [],
+    "menteeId": [],
     "mentors": []
   },
   {
@@ -87,7 +87,7 @@
     "codingLanguage": ["JavaScript", "HTML", "CSS"],
     "availability": ["Monday", "Wednesday", "Friday"],
     "meetingType": "in-person",
-    "mentees": [],
+    "menteeId": [],
     "mentors": []
   },
   {
@@ -102,7 +102,7 @@
     "codingLanguage": ["Python", "Java"],
     "availability": ["Wednesday", "Saturday"],
     "meetingType": "virtual",
-    "mentees": [],
+    "menteeId": [],
     "mentors": []
   },
   {
@@ -117,7 +117,7 @@
     "codingLanguage": ["JavaScript", "Swift"],
     "availability": ["Tuesday", "Thursday"],
     "meetingType": "in-person",
-    "mentees": [],
+    "menteeId": [],
     "mentors": []
   },
   {
@@ -132,7 +132,7 @@
     "codingLanguage": ["Python", "Bash"],
     "availability": ["Monday", "Friday"],
     "meetingType": "virtual",
-    "mentees": [],
+    "menteeId": [],
     "mentors": []
   },
   {
@@ -147,7 +147,7 @@
     "codingLanguage": ["SQL"],
     "availability": ["Wednesday", "Saturday"],
     "meetingType": "in-person",
-    "mentees": [],
+    "menteeId": [],
     "mentors": []
   },
   {
@@ -162,7 +162,7 @@
     "codingLanguage": [],
     "availability": ["Tuesday", "Thursday"],
     "meetingType": "virtual",
-    "mentees": [],
+    "menteeId": [],
     "mentors": []
   },
   {
@@ -177,7 +177,7 @@
     "codingLanguage": ["JavaScript", "HTML"],
     "availability": ["Monday", "Wednesday"],
     "meetingType": "in-person",
-    "mentees": [],
+    "menteeId": [],
     "mentors": []
   },
   {
@@ -192,7 +192,7 @@
     "codingLanguage": ["C#", "Python"],
     "availability": ["Tuesday", "Thursday"],
     "meetingType": "virtual",
-    "mentees": [],
+    "menteeId": [],
     "mentors": []
   }
 ]
