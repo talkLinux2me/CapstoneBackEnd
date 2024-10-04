@@ -48,16 +48,7 @@ public class UserController {
         Optional<User> registeredUser = userServices.saveUser(newUser);
         if (registeredUser.isPresent()) {
             logger.info("User registered successfully: {}", registeredUser.get().getEmail());
-
-            // Fetch matches for the newly registered user
-            List<User> matches = matchingService.findMatchesForUser(registeredUser.get());
-
-            // Return the user and their matches in the response
-            HashMap<String, Object> response = new HashMap<>();
-            response.put("user", registeredUser.get());
-            response.put("matches", matches);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser.get());
         } else {
             logger.error("An error occurred during registration for user: {}", newUser.getEmail());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error has occurred during registration.");
@@ -72,7 +63,7 @@ public class UserController {
         if (user.isPresent()) {
             HashMap response = new HashMap<>();
             response.put("token", "granted");
-            response.put("userID", user.get().getId());
+            response.put("userID", user.get().getId() );
             response.put("role", user.get().getRole());
             logger.info("User logged in successfully: {}", loginRequest.getEmail());
             return ResponseEntity.ok().body(response);
@@ -142,26 +133,28 @@ public class UserController {
     @GetMapping("/{menteeId}/matches")
     public ResponseEntity<List<MatchDTO>> getMatches(@PathVariable Long menteeId) {
         logger.info("Fetching matches for mentee with ID: {}", menteeId);
-        List<MatchDTO> matches = matchingService.findMatchesForUsers(menteeId);
-
+        List<User> matches = matchingService.matchMentees(menteeId);
         return matches.isEmpty()
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of())
-                : ResponseEntity.ok(matches);
+                : (ResponseEntity<List<MatchDTO>>) ResponseEntity.ok();
     }
 
 
 
     @GetMapping("/getAllMentors")
-    public ResponseEntity<?> getAllMentors() {
+    public  ResponseEntity<?> getAllMentors(){
         List<User> allMentors = userServices.getAllFreeMentors();
-        return ResponseEntity.ok().body(allMentors);
+        return  ResponseEntity.ok().body(allMentors);
     }
 
+
     @GetMapping("/getAllMentees")
-    public ResponseEntity<?> getAllMentees() {
+    public  ResponseEntity<?> getAllMentees(){
         List<User> allMentees = userServices.getAllFreeMentees();
-        return ResponseEntity.ok().body(allMentees);
+        return  ResponseEntity.ok().body(allMentees);
     }
+
+
 
     @PutMapping("/edit/{userID}")
     public ResponseEntity<?> editUser(@PathVariable Long userID, @RequestBody EditUserDTO newDetails) {
@@ -171,24 +164,32 @@ public class UserController {
             return ResponseEntity.ok().body(foundUser.get());
         }
 
-        return ResponseEntity.ok().body("Oops! Something happened");
+        return ResponseEntity.ok().body("OOpsie something happened");
+
     }
+
+
 
     @GetMapping("/match/{menteeId}")
     public ResponseEntity<User> matchMenteeWithMentor(@PathVariable Long menteeId) {
-        Optional<User> mentee = userRepository.findById(menteeId);
+        // Fetch the mentee based on ID
+       Optional<User> mentee = userRepository.findById(menteeId);
+
 
         if (!mentee.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build(); // Return 404 if mentee not found
         }
 
+        // Fetch all mentors
         List<User> mentors = userServices.getAllFreeMentors();
-        User matchedMentor = userServices.matchMenteeWithMentor(mentee.get(), mentors);
+
+        // Get a matched mentor
+        User matchedMentor = userServices.matchMenteeWithMentor(mentee.get(),mentors);
 
         if (matchedMentor != null) {
-            return ResponseEntity.ok(matchedMentor);
+            return ResponseEntity.ok(matchedMentor); // Return matched mentor
         } else {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build(); // Return 204 if no matches found
         }
     }
 }

@@ -61,13 +61,13 @@ public class User {
     private String meetingType; // "virtual" or "in-person"
 
    @ElementCollection
-   @CollectionTable(name = "menteeId", joinColumns = @JoinColumn(name = "userId"))
-   @Column(name = "menteeId")
-   private List<Long> menteeId;
+   @CollectionTable(name = "mentee_ids", joinColumns = @JoinColumn(name = "user_id"))
+   @Column(name = "mentee_id")
+   private List<Long> mentees;
 
    @ElementCollection
-   @CollectionTable(name = "mentorId", joinColumns = @JoinColumn(name = "userId"))
-   @Column(name = "mentorId")
+   @CollectionTable(name = "mentor_ids", joinColumns = @JoinColumn(name = "user_id"))
+   @Column(name = "mentor_id")
    private List<Long> mentors;
 
 

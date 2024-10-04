@@ -10,21 +10,11 @@ public class MatchDTO {
     private Long menteeId;
     private String mentorName;
     private String menteeName;
-    private List<String> availability;
-    private List<String> meetingType;
-    private List<String> codingLanguage;
+    private List<String> commonAvailability;
+    private String meetingType;
+    private List<String> commonCodingLanguage;
     private String interests;
     private String location;
     private String certifications;
-
-
-public MatchDTO(List<String> availability, List<String> meetingType, List<String> codingLanguage) {
-
 }
-        {
-            this.availability = availability;
-            this.meetingType = meetingType;
-            this.codingLanguage = codingLanguage;
-        }
-    }
 

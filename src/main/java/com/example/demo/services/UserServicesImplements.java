@@ -2,7 +2,6 @@ package com.example.demo.services;
 
 import com.example.demo.dto.EditUserDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.models.User;
@@ -14,8 +13,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserServicesImplements implements UserServices {
-@Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
 
     @Override
     public List<User> getAllUsers() {
@@ -63,8 +62,8 @@ public class UserServicesImplements implements UserServices {
         if (mentor.isPresent() && mentee.isPresent()) {
             User mentorUser = mentor.get();
             User menteeUser = mentee.get();
-            if (!mentorUser.getMenteeId().contains(menteeId) && !menteeUser.getMentors().contains(mentorId)) {
-                mentorUser.getMenteeId().add(menteeId);
+            if (!mentorUser.getMentees().contains(menteeId) && !menteeUser.getMentors().contains(mentorId)) {
+                mentorUser.getMentees().add(menteeId);
                 menteeUser.getMentors().add(mentorId);
             } else {
                 System.out.println("Mentor and mentee are already assigned");
@@ -83,7 +82,7 @@ public class UserServicesImplements implements UserServices {
         Optional<User> mentee = userRepository.findById(menteeId);
 
         if (mentor.isPresent() && mentee.isPresent()) {
-            mentor.get().getMenteeId().remove(menteeId);
+            mentor.get().getMentees().remove(menteeId);
             mentee.get().getMentors().remove(mentorId);
             userRepository.save(mentor.get());
             userRepository.save(mentee.get());
@@ -97,7 +96,7 @@ public class UserServicesImplements implements UserServices {
     public List<User> getAllMentees(Long mentorId) {
         Optional<User> mentor = userRepository.findById(mentorId);
         if (mentor.isPresent()) {
-            List<Long> menteeIds = mentor.get().getMenteeId();
+            List<Long> menteeIds = mentor.get().getMentees();
             return menteeIds.stream()
                     .map(userRepository::findById)
                     .filter(Optional::isPresent)
