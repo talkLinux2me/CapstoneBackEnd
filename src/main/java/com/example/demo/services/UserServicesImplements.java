@@ -173,9 +173,10 @@ public class UserServicesImplements implements UserServices {
 
         if(foundUser.isPresent()){
             foundUser.get().setLocation(newDetails.getLocation());
-            foundUser.get().setInterests(newDetails.getInterests());
-            foundUser.get().setSkills(newDetails.getSkills());
+            foundUser.get().setMeetingType(newDetails.getMeetingType());
+            foundUser.get().setCertifications(newDetails.getCertifications());
             foundUser.get().setPersonalStatement(newDetails.getPersonalStatement());
+            foundUser.get().setYearsOfExperience(newDetails.getYearsOfExperience());
 
             return Optional.of(userRepository.save(foundUser.get()));
         }

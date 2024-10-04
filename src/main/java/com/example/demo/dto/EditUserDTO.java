@@ -8,6 +8,7 @@ import java.util.List;
 public class EditUserDTO {
     private String location;
     private String personalStatement;
-    private List<String> interests;
-    private List <String> skills;
+    private String certifications;
+    private int yearsOfExperience;
+    private String meetingType;
 }

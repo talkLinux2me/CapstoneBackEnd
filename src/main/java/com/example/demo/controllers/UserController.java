@@ -63,7 +63,7 @@ public class UserController {
         if (user.isPresent()) {
             HashMap response = new HashMap<>();
             response.put("token", "granted");
-            response.put("userID", user.get().getId() );
+            response.put("userID", user.get().getId());
             response.put("role", user.get().getRole());
             logger.info("User logged in successfully: {}", loginRequest.getEmail());
             return ResponseEntity.ok().body(response);
@@ -102,6 +102,36 @@ public class UserController {
                 ? ResponseEntity.ok(result.get())
                 : ResponseEntity.notFound().build();
     }
+
+//    @PostMapping("user/{menteeId}")
+//    public ResponseEntity<?> addMentee(@PathVariable Long menteeId) {
+//        logger.info("Adding mentee with ID: {}", menteeId);
+//        Optional<User> result = userServices.addMentee(menteeId);
+//        return result.isPresent()
+//                ? ResponseEntity.ok(result.get())
+//                : ResponseEntity.notFound().build();
+//    }
+
+//    @PutMapping("/{id}")
+//    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+//        Optional<User> user = userRepository.findById(id);
+//        if (user.isPresent()) {
+//            User updatedUser = user.get();
+//            updatedUser.setCertifications(userDetails.getCertifications());
+//            updatedUser.setYearsOfExperience(userDetails.getYearsOfExperience());
+//            updatedUser.setLocation(userDetails.getLocation());
+//            updatedUser.setCodingLanguage(userDetails.getCodingLanguage());
+//            updatedUser.setAvailability(userDetails.getAvailability());
+//            updatedUser.setMeetingType(userDetails.getMeetingType());
+//            userRepository.save(updatedUser);
+//            return ResponseEntity.ok(updatedUser);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
+
+
 
     @DeleteMapping("/{mentorId}/remove-mentee/{menteeId}")
     public ResponseEntity<?> removeMentee(@PathVariable Long mentorId, @PathVariable Long menteeId) {

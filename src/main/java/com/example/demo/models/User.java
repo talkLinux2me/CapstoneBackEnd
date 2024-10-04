@@ -43,14 +43,12 @@ public class User {
     @Column(name = "location")
     private String location;
 
-
     @Column(name ="role")
     private String role;
 
     @ElementCollection
     @Column(name = "coding_language")
-    private List<String> codingLanguage; // Languages the mentor knows
-
+    private List<String> codingLanguage;
 
     @ElementCollection
     @Column(name = "availability")
